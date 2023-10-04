@@ -16,7 +16,21 @@
           rev = "7e856d1";
           hash = "sha256-KxItJo+Q/oI6A7rV/0sPEVLmKzXN07k93Sege01TVR4=";
         };
-        buildPhase = "cp README.md speak";
+        nativeBuildInputs = [
+          cmake
+          ninja
+          python3
+        ];
+        configurePhase = pkgs.lib.strings.concatStringsSep " " [
+          "cmake"
+          "-S llvm"
+          "-B build"
+          "-G Ninja"
+          "-DLLVM_ENABLE_PROJECTS=\"clang\""
+          "-DCMAKE_BUILD_TYPE=Relase"
+          "-DCMAKE_INSTALL_PREFIX=\"$out\""
+        ];
+        buildPhase = "echo $PWD > speak";
         installPhase = "mkdir -p $out/bin; install -t $out/bin speak";
       };
 
