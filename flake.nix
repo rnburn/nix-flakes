@@ -11,8 +11,8 @@
       stdenv.mkDerivation {
         name = "hello";
         src = self;
-        buildPhase = "g++ -o hello ./hello.cc";
-        installPhase = "mkdir -p $out/bin; install -t $out/bin hello";
+        buildPhase = "echo arf > speak";
+        installPhase = "mkdir -p $out/bin; install -t $out/bin speak";
       };
 
   };
