@@ -22,16 +22,16 @@
           python3
         ];
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
+          "mkdir build; cd build;"
           "cmake"
-          "-S llvm"
-          "-B build"
-          "-G Ninja"
+          "-G \"Unix Makefiles\""
           "-DLLVM_ENABLE_PROJECTS=\"clang\""
           "-DCMAKE_BUILD_TYPE=Relase"
           "-DCMAKE_INSTALL_PREFIX=\"$out\""
+          "../llvm"
         ];
-        buildPhase = "echo $PWD > speak";
-        installPhase = "mkdir -p $out/bin; install -t $out/bin speak";
+        buildPhase = "make";
+        installPhase = "make install";
       };
 
   };
