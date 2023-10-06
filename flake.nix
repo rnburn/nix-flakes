@@ -25,8 +25,8 @@
           "mkdir build; cd build;"
           "cmake"
           "-G \"Unix Makefiles\""
-          "-DLLVM_ENABLE_PROJECTS=\"clang\""
-          "-DCMAKE_BUILD_TYPE=Relase"
+          "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lldb;openmp\""
+          "-DCMAKE_BUILD_TYPE=Release"
           "-DCMAKE_INSTALL_PREFIX=\"$out\""
           "../llvm"
         ];
