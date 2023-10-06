@@ -18,6 +18,7 @@
         };
         nativeBuildInputs = [
           cmake
+	  perl
           ninja
           python3
         ];
