@@ -1,5 +1,5 @@
 {
-  description = "A flake for building Hello World";
+  description = "Compiler";
 
   inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
 
@@ -10,7 +10,7 @@
       with import nixpkgs { system = "x86_64-linux"; };
       let pkgs = nixpkgs.legacyPackages.x86_64-linux;
       in stdenv.mkDerivation {
-        name = "hello";
+        name = "clang";
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
           rev = "7e856d1";
