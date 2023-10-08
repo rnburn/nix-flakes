@@ -13,8 +13,8 @@
         name = "clang";
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
-          rev = "7e856d1";
-          hash = "sha256-KxItJo+Q/oI6A7rV/0sPEVLmKzXN07k93Sege01TVR4=";
+          rev = "11caef0";
+          hash = "sha256-Rcmw0hMy58toxPhNithea2UH5NMvytRf4fp2WqUjLvs=";
         };
         nativeBuildInputs = [
           cmake
@@ -26,7 +26,12 @@
           "mkdir build; cd build;"
           "cmake"
           "-G \"Unix Makefiles\""
-          "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lldb;openmp\""
+          "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
+	  "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
+	  "-DLIBCXX_ENABLE_SHARED=YES"
+	  "-DLIBCXX_ENABLE_STATIC=YES"
+	  "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=YES"
+	  "-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=YES"
           "-DCMAKE_BUILD_TYPE=Release"
           "-DCMAKE_INSTALL_PREFIX=\"$out\""
           "../llvm"
