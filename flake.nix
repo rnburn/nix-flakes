@@ -26,6 +26,7 @@
           "mkdir build; cd build;"
           "cmake"
           "-G \"Unix Makefiles\""
+          "-DLLVM_TARGETS_TO_BUILD=\"host\""
           "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
 	  "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
 	  "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
