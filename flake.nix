@@ -9,7 +9,7 @@
       # Notice the reference to nixpkgs here.
       with import nixpkgs { system = "x86_64-linux"; };
       let pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      in stdenv.mkDerivation {
+      in stdenvNoCC.mkDerivation {
         name = "clang";
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
@@ -22,6 +22,9 @@
           ninja
           python3
         ];
+	buildInputs = [
+	  gcc
+	];
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
           "cmake"
