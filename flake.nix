@@ -31,6 +31,8 @@
           "-G \"Unix Makefiles\""
 	  "-DC_INCLUDE_DIRS=${gcc.libc.dev}/include"
           "-DLLVM_TARGETS_TO_BUILD=\"host\""
+	  "-DLLVM_BUILTIN_TARGETS=\"x86_64-unknown-linux-gnu\""
+          "-DLLVM_RUNTIME_TARGETS=\"x86_64-unknown-linux-gnu\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
           "-DLLVM_ENABLE_PROJECTS=\"clang\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
