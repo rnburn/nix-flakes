@@ -23,30 +23,34 @@
           python3
         ];
 	buildInputs = [
+	  glibc
 	  gcc
 	];
-        configurePhase = pkgs.lib.strings.concatStringsSep " " [
-          "mkdir build; cd build;"
-          "cmake"
-          "-G \"Unix Makefiles\""
-          "-DLLVM_TARGETS_TO_BUILD=\"host\""
-          # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
-          "-DLLVM_ENABLE_PROJECTS=\"clang\""
-	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
-	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind\""
-	  "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi\""
-	  "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
-	  "-DLIBCXX_ENABLE_SHARED=YES"
-	  "-DLIBCXX_ENABLE_STATIC=YES"
-	  "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=YES"
-	  # "-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=YES"
-          # "-DCOMPILER_RT_USE_LIBCXX=ON"
-          "-DCMAKE_BUILD_TYPE=Release"
-          "-DCMAKE_INSTALL_PREFIX=\"$out\""
-          "../llvm"
-        ];
-        buildPhase = "make";
-        installPhase = "make install";
+	configurePhase = "echo hello";
+	buildPhase = "echo ${glibc.dev} > yip";
+	installPhase = "mkdir -p $out/bin; install -t $out/bin yip";
+        # configurePhase = pkgs.lib.strings.concatStringsSep " " [
+        #   "mkdir build; cd build;"
+        #   "cmake"
+        #   "-G \"Unix Makefiles\""
+        #   "-DLLVM_TARGETS_TO_BUILD=\"host\""
+        #   # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
+        #   "-DLLVM_ENABLE_PROJECTS=\"clang\""
+	#   # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
+	#   # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind\""
+	#   "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi\""
+	#   "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
+	#   "-DLIBCXX_ENABLE_SHARED=YES"
+	#   "-DLIBCXX_ENABLE_STATIC=YES"
+	#   "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=YES"
+	#   # "-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=YES"
+        #   # "-DCOMPILER_RT_USE_LIBCXX=ON"
+        #   "-DCMAKE_BUILD_TYPE=Release"
+        #   "-DCMAKE_INSTALL_PREFIX=\"$out\""
+        #   "../llvm"
+        # ];
+        # buildPhase = "make";
+        # installPhase = "make install";
       };
 
   };
