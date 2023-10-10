@@ -21,16 +21,15 @@
 	  perl
           ninja
           python3
-	  gcc
         ];
 	buildInputs = [
-	  glibc
+	  gcc
 	];
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
           "cmake"
           "-G \"Unix Makefiles\""
-	  "-DC_INCLUDE_DIRS=${glibc.dev}/include"
+	  "-DC_INCLUDE_DIRS=${gcc.libc.dev}/include"
           "-DLLVM_TARGETS_TO_BUILD=\"host\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
           "-DLLVM_ENABLE_PROJECTS=\"clang\""
