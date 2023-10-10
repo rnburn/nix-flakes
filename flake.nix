@@ -36,7 +36,7 @@
 	# installPhase = "mkdir -p $out/bin; install -t $out/bin yip";
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
-	  "CFLAGS=\"-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc.lib.dev}/lib\";"
+	  "CFLAGS=\"-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc.libc.dev}/lib\";"
           "cmake"
           "-G \"Unix Makefiles\""
 	  "-DGCC_INSTALL_PREFIX=${gccForLibs}"
