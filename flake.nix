@@ -34,9 +34,10 @@
 	#   echo ${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} >> yip
 	# '';
 	# installPhase = "mkdir -p $out/bin; install -t $out/bin yip";
+	NIX_LDFLAGS="-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -L${gcc.libc.dev}/lib";
+	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc.libc.dev}/lib";
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
-	  "CFLAGS=\"-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc.libc.dev}/lib\";"
           "cmake"
           "-G \"Unix Makefiles\""
 	  "-DGCC_INSTALL_PREFIX=${gccForLibs}"
@@ -45,13 +46,13 @@
 	  "-DLLVM_BUILTIN_TARGETS=\"x86_64-unknown-linux-gnu\""
           "-DLLVM_RUNTIME_TARGETS=\"x86_64-unknown-linux-gnu\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
-          "-DLLVM_ENABLE_PROJECTS=\"clang;lld\""
+          "-DLLVM_ENABLE_PROJECTS=\"clang\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind\""
 	  "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi\""
-	  "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
-	  "-DLIBCXX_ENABLE_SHARED=YES"
-	  "-DLIBCXX_ENABLE_STATIC=YES"
+	  # "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
+	  "-DLIBCXX_ENABLE_SHARED=OFF"
+	  "-DLIBCXX_ENABLE_STATIC=ON"
 	  "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=YES"
 	  # "-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=YES"
           # "-DCOMPILER_RT_USE_LIBCXX=ON"
