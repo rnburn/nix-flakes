@@ -1,0 +1,19 @@
+diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
+index cdd911af9a73..205719cdaea1 100644
+--- a/clang/lib/Driver/ToolChains/Gnu.cpp
++++ b/clang/lib/Driver/ToolChains/Gnu.cpp
+@@ -490,10 +490,12 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+           crt1 = "crt1.o";
+       }
+       if (crt1)
+-        CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath(crt1)));
++        CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + crt1));
+ 
+-      CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crti.o")));
++      CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + "crti.o"));
+     }
++    CmdArgs.push_back("-L");
++    CmdArgs.push_back("GLIBC_PATH_ABC123");
+ 
+     if (IsVE) {
+       CmdArgs.push_back("-z");
