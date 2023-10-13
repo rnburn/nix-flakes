@@ -1,5 +1,5 @@
 diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
-index cdd911af9a73..205719cdaea1 100644
+index cdd911af9a73..54d509e42513 100644
 --- a/clang/lib/Driver/ToolChains/Gnu.cpp
 +++ b/clang/lib/Driver/ToolChains/Gnu.cpp
 @@ -490,10 +490,12 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
@@ -17,3 +17,12 @@ index cdd911af9a73..205719cdaea1 100644
  
      if (IsVE) {
        CmdArgs.push_back("-z");
+@@ -671,7 +673,7 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+         CmdArgs.push_back(Args.MakeArgString(P));
+       }
+       if (!isAndroid)
+-        CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crtn.o")));
++        CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + "crtn.o"));
+     }
+   }
+ 
