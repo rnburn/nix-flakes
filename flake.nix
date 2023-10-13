@@ -16,7 +16,7 @@
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
 	  rev = "53c81a8";
-          hash = "sha256-ZlZKuHOdiQLkZU8uL2NiVcAgpS0sU2vR3UW88FAm39M=";
+          hash = "sha256-VAWUY705XJ+URBvDWaCbnh4tq3v9eYsruUr8ehwihsY=";
         };
         nativeBuildInputs = [
           cmake
