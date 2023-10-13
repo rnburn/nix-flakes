@@ -15,7 +15,7 @@
         name = "clang";
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
-          rev = "4a0ccfa865437fe29ef2ecb18152df7694dddb7f";
+	  rev = "53c81a8";
           hash = "sha256-ZlZKuHOdiQLkZU8uL2NiVcAgpS0sU2vR3UW88FAm39M=";
         };
         nativeBuildInputs = [
@@ -36,6 +36,7 @@
 	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc}/lib";
 	patches = [
 	  ./clang_driver.patch
+	  ./add-nostdlibinc-flag.patch
 	];
 	postPatch = ''
 	  substituteInPlace clang/lib/Driver/ToolChains/Gnu.cpp \
