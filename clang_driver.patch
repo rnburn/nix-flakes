@@ -1,3 +1,23 @@
+diff --git a/clang/lib/Driver/ToolChains/CommonArgs.cpp b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+index 25fd94058462..76b7dd23b594 100644
+--- a/clang/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+@@ -1802,14 +1802,7 @@ enum class LibGccType { UnspecifiedLibGcc, StaticLibGcc, SharedLibGcc };
+ 
+ static LibGccType getLibGccType(const ToolChain &TC, const Driver &D,
+                                 const ArgList &Args) {
+-  if (Args.hasArg(options::OPT_static_libgcc) ||
+-      Args.hasArg(options::OPT_static) || Args.hasArg(options::OPT_static_pie) ||
+-      // The Android NDK only provides libunwind.a, not libunwind.so.
+-      TC.getTriple().isAndroid())
+-    return LibGccType::StaticLibGcc;
+-  if (Args.hasArg(options::OPT_shared_libgcc))
+-    return LibGccType::SharedLibGcc;
+-  return LibGccType::UnspecifiedLibGcc;
++  return LibGccType::StaticLibGcc;
+ }
+ 
+ // Gcc adds libgcc arguments in various ways:
 diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
 index cdd911af9a73..54d509e42513 100644
 --- a/clang/lib/Driver/ToolChains/Gnu.cpp
