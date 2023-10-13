@@ -32,14 +32,14 @@
 	  cat clang/lib/Driver/ToolChains/Gnu.cpp >> yip
 	'';
 	installPhase = "mkdir -p $out/bin; install -t $out/bin yip";
-	NIX_LDFLAGS="-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -L${gcc13.libc.dev}/lib";
-	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc.dev}/lib";
+	NIX_LDFLAGS="-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -L${gcc13.libc}/lib";
+	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc}/lib";
 	patches = [
-	  "./clang_driver.patch"
+	  ./clang_driver.patch
 	];
 	postPatch = ''
 	  substituteInPlace clang/lib/Driver/ToolChains/Gnu.cpp \
-	    --replace 'GLIBC_PATH_ABC123' '${gcc13.libc.dev}/lib'
+	    --replace 'GLIBC_PATH_ABC123' '${gcc13.libc}/lib'
 	'';
         # configurePhase = pkgs.lib.strings.concatStringsSep " " [
         #   "mkdir build; cd build;"
