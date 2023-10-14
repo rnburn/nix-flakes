@@ -36,7 +36,6 @@
 	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc}/lib";
 	patches = [
 	  ./clang_driver.patch
-	  ./add-nostdlibinc-flag.patch
 	];
 	postPatch = ''
 	  substituteInPlace clang/lib/Driver/ToolChains/Gnu.cpp \
@@ -53,7 +52,7 @@
           "-DLLVM_RUNTIME_TARGETS=\"x86_64-unknown-linux-gnu\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra\""
-          "-DLLVM_ENABLE_PROJECTS=\"clang\""
+          "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi\""
