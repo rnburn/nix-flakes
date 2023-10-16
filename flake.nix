@@ -47,7 +47,7 @@
           "-G \"Unix Makefiles\""
 	  "-DGCC_INSTALL_PREFIX=${gccForLibs}"
 	  "-DC_INCLUDE_DIRS=${gcc13.libc.dev}/include"
-          "-DLLVM_TARGETS_TO_BUILD=\"host\""
+          "-DLLVM_TARGETS_TO_BUILD=\"host;NVPTX\""
 	  "-DLLVM_BUILTIN_TARGETS=\"x86_64-unknown-linux-gnu\""
           "-DLLVM_RUNTIME_TARGETS=\"x86_64-unknown-linux-gnu\""
           # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
