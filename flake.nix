@@ -15,8 +15,8 @@
         name = "clang";
         src = pkgs.fetchgit {
           url = "https://github.com/llvm/llvm-project";
-	  rev = "b427388";
-	  hash = "sha256-dvL3DL6YL9rZ0mqpIq5Ue6bQkDJxejqql6Z5iwc3xyc=";
+	  rev = "f3ea731";
+	  hash = "sha256-Ozc7QM+1O3ib1PtzxsG8ZRsPoqmF4TonKVpEXXmTDYA=";
         };
         nativeBuildInputs = [
           cmake
@@ -72,15 +72,8 @@
           "-DCMAKE_INSTALL_PREFIX=\"$out\""
           "../llvm"
         ];
-        # buildPhase = "make";
-        buildPhase = ''
-	  echo arf
-	'';
-	installPhase = ''
-	  mkdir -p $out
-	  cp -r ../build $out/build
-	'';
-        # installPhase = "make install";
+        buildPhase = "make";
+        installPhase = "make install";
       };
 
   };
