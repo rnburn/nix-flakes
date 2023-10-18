@@ -32,6 +32,8 @@
 	#   cat clang/lib/Driver/ToolChains/Gnu.cpp >> yip
 	# '';
 	# installPhase = "mkdir -p $out/bin; install -t $out/bin yip";
+	# How to pass options to runtimes?
+	#   https://discourse.llvm.org/t/how-to-pass-cmake-options-to-the-runtimes-configuration/61235
 	NIX_LDFLAGS="-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -L${gcc13.libc}/lib";
 	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc}/lib";
 	patches = [
@@ -44,7 +46,6 @@
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
           "cmake"
-	  "--trace-expand"
           "-G \"Unix Makefiles\""
 	  "-DGCC_INSTALL_PREFIX=${gccForLibs}"
 	  "-DCMAKE_VERBOSE_MAKEFILE=ON"
