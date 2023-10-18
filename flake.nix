@@ -35,7 +35,7 @@
 	NIX_LDFLAGS="-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -L${gcc13.libc}/lib";
 	CFLAGS="-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version} -B${gcc13.libc}/lib";
 	patches = [
-	  ./clang_driver.patch
+	  ./clang_options.patch
 	];
 	postPatch = ''
 	  substituteInPlace clang/lib/Driver/ToolChains/Gnu.cpp \
@@ -44,14 +44,14 @@
         configurePhase = pkgs.lib.strings.concatStringsSep " " [
           "mkdir build; cd build;"
           "cmake"
+	  "--trace-expand"
           "-G \"Unix Makefiles\""
 	  "-DGCC_INSTALL_PREFIX=${gccForLibs}"
+	  "-DCMAKE_VERBOSE_MAKEFILE=ON"
 	  "-DC_INCLUDE_DIRS=${gcc13.libc.dev}/include"
           "-DLLVM_TARGETS_TO_BUILD=\"host;NVPTX\""
 	  "-DLLVM_BUILTIN_TARGETS=\"x86_64-unknown-linux-gnu\""
           "-DLLVM_RUNTIME_TARGETS=\"x86_64-unknown-linux-gnu\""
-          # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra;lld;lldb;openmp\""
-          # "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra\""
           "-DLLVM_ENABLE_PROJECTS=\"clang;clang-tools-extra\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind;compiler-rt\""
 	  # "-DLLVM_ENABLE_RUNTIMES=\"libcxx;libcxxabi;libunwind\""
@@ -60,6 +60,9 @@
 	  # "-DCLANG_DEFAULT_CXX_STDLIB=\"libc++\""
 	  "-DLIBCXX_ENABLE_SHARED=OFF"
 	  "-DLIBCXX_ENABLE_STATIC=ON"
+	  "-DLIBCXXABI_ENABLE_STATIC=ON"
+	  "-DLIBUNWIND_ENABLE_STATIC=ON"
+	  "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON"
 	  "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON"
 	  "-DLIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY=ON"
 	  "-DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=YES"
@@ -68,8 +71,15 @@
           "-DCMAKE_INSTALL_PREFIX=\"$out\""
           "../llvm"
         ];
-        buildPhase = "make";
-        installPhase = "make install";
+        # buildPhase = "make";
+        buildPhase = ''
+	  echo arf
+	'';
+	installPhase = ''
+	  mkdir -p $out
+	  cp -r ../build $out/build
+	'';
+        # installPhase = "make install";
       };
 
   };

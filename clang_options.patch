@@ -1,0 +1,107 @@
+diff --git a/clang/lib/Driver/ToolChains/CommonArgs.cpp b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+index 25fd94058462..76b7dd23b594 100644
+--- a/clang/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/clang/lib/Driver/ToolChains/CommonArgs.cpp
+@@ -1802,14 +1802,7 @@ enum class LibGccType { UnspecifiedLibGcc, StaticLibGcc, SharedLibGcc };
+ 
+ static LibGccType getLibGccType(const ToolChain &TC, const Driver &D,
+                                 const ArgList &Args) {
+-  if (Args.hasArg(options::OPT_static_libgcc) ||
+-      Args.hasArg(options::OPT_static) || Args.hasArg(options::OPT_static_pie) ||
+-      // The Android NDK only provides libunwind.a, not libunwind.so.
+-      TC.getTriple().isAndroid())
+-    return LibGccType::StaticLibGcc;
+-  if (Args.hasArg(options::OPT_shared_libgcc))
+-    return LibGccType::SharedLibGcc;
+-  return LibGccType::UnspecifiedLibGcc;
++  return LibGccType::StaticLibGcc;
+ }
+ 
+ // Gcc adds libgcc arguments in various ways:
+diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
+index cdd911af9a73..54d509e42513 100644
+--- a/clang/lib/Driver/ToolChains/Gnu.cpp
++++ b/clang/lib/Driver/ToolChains/Gnu.cpp
+@@ -490,10 +490,12 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+           crt1 = "crt1.o";
+       }
+       if (crt1)
+-        CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath(crt1)));
++        CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + crt1));
+ 
+-      CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crti.o")));
++      CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + "crti.o"));
+     }
++    CmdArgs.push_back("-L");
++    CmdArgs.push_back("GLIBC_PATH_ABC123");
+ 
+     if (IsVE) {
+       CmdArgs.push_back("-z");
+@@ -671,7 +673,7 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+         CmdArgs.push_back(Args.MakeArgString(P));
+       }
+       if (!isAndroid)
+-        CmdArgs.push_back(Args.MakeArgString(ToolChain.GetFilePath("crtn.o")));
++        CmdArgs.push_back(Args.MakeArgString(Twine("GLIBC_PATH_ABC123/") + "crtn.o"));
+     }
+   }
+ 
+diff --git a/libcxx/CMakeLists.txt b/libcxx/CMakeLists.txt
+index 16540caf68ea..1126ad1d7f46 100644
+--- a/libcxx/CMakeLists.txt
++++ b/libcxx/CMakeLists.txt
+@@ -52,7 +52,7 @@ option(LIBCXX_ENABLE_ASSERTIONS
+   "Enable assertions inside the compiled library, and at the same time make it the
+    default when compiling user code. Note that assertions can be enabled or disabled
+    by users in their own code regardless of this option." OFF)
+-option(LIBCXX_ENABLE_SHARED "Build libc++ as a shared library." ON)
++option(LIBCXX_ENABLE_SHARED "Build libc++ as a shared library." OFF)
+ option(LIBCXX_ENABLE_STATIC "Build libc++ as a static library." ON)
+ option(LIBCXX_ENABLE_FILESYSTEM
+   "Whether to include support for parts of the library that rely on a filesystem being
+@@ -239,7 +239,7 @@ endif()
+ 
+ option(LIBCXX_ENABLE_STATIC_ABI_LIBRARY
+   "Use a static copy of the ABI library when linking libc++.
+-   This option cannot be used with LIBCXX_ENABLE_ABI_LINKER_SCRIPT." OFF)
++  This option cannot be used with LIBCXX_ENABLE_ABI_LINKER_SCRIPT." ON)
+ 
+ option(LIBCXX_STATICALLY_LINK_ABI_IN_STATIC_LIBRARY
+   "Statically link the ABI library to static library"
+diff --git a/libcxxabi/CMakeLists.txt b/libcxxabi/CMakeLists.txt
+index 6fd4f02c750f..dc0c5061c911 100644
+--- a/libcxxabi/CMakeLists.txt
++++ b/libcxxabi/CMakeLists.txt
+@@ -46,8 +46,8 @@ option(LIBCXXABI_ENABLE_EXCEPTIONS
+ option(LIBCXXABI_ENABLE_ASSERTIONS "Enable assertions independent of build mode." ON)
+ option(LIBCXXABI_ENABLE_PEDANTIC "Compile with pedantic enabled." OFF)
+ option(LIBCXXABI_ENABLE_WERROR "Fail and stop if a warning is triggered." OFF)
+-option(LIBCXXABI_USE_LLVM_UNWINDER "Build and use the LLVM unwinder." OFF)
+-option(LIBCXXABI_ENABLE_STATIC_UNWINDER "Statically link the LLVM unwinder." OFF)
++option(LIBCXXABI_USE_LLVM_UNWINDER "Build and use the LLVM unwinder." ON)
++option(LIBCXXABI_ENABLE_STATIC_UNWINDER "Statically link the LLVM unwinder." ON)
+ option(LIBCXXABI_USE_COMPILER_RT "Use compiler-rt instead of libgcc" OFF)
+ option(LIBCXXABI_ENABLE_THREADS "Build with threads enabled" ON)
+ option(LIBCXXABI_HAS_PTHREAD_API "Ignore auto-detection and force use of pthread API" OFF)
+@@ -104,7 +104,7 @@ usual symlinks pointing to that.")
+ # the libc++abi that is being built. The problem with testing a static libc++abi
+ # is that libc++ will prefer a dynamic libc++abi from the system over a static
+ # libc++abi from the output directory.
+-option(LIBCXXABI_ENABLE_SHARED "Build libc++abi as a shared library." ON)
++option(LIBCXXABI_ENABLE_SHARED "Build libc++abi as a shared library." OFF)
+ option(LIBCXXABI_ENABLE_STATIC "Build libc++abi as a static library." ON)
+ 
+ cmake_dependent_option(LIBCXXABI_INSTALL_STATIC_LIBRARY
+diff --git a/libunwind/CMakeLists.txt b/libunwind/CMakeLists.txt
+index 84f8ce296a74..51bd54b1ba9f 100644
+--- a/libunwind/CMakeLists.txt
++++ b/libunwind/CMakeLists.txt
+@@ -38,7 +38,7 @@ option(LIBUNWIND_ENABLE_CET "Build libunwind with CET enabled." OFF)
+ option(LIBUNWIND_ENABLE_ASSERTIONS "Enable assertions independent of build mode." ON)
+ option(LIBUNWIND_ENABLE_PEDANTIC "Compile with pedantic enabled." ON)
+ option(LIBUNWIND_ENABLE_WERROR "Fail and stop if a warning is triggered." OFF)
+-option(LIBUNWIND_ENABLE_SHARED "Build libunwind as a shared library." ON)
++option(LIBUNWIND_ENABLE_SHARED "Build libunwind as a shared library." OFF)
+ option(LIBUNWIND_ENABLE_STATIC "Build libunwind as a static library." ON)
+ option(LIBUNWIND_ENABLE_CROSS_UNWINDING "Enable cross-platform unwinding support." OFF)
+ option(LIBUNWIND_ENABLE_ARM_WMMX "Enable unwinding support for ARM WMMX registers." OFF)
